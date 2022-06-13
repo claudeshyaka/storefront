@@ -24,16 +24,17 @@ class Collection(models.Model):
 class Product(models.Model):
     collection = models.ForeignKey(Collection, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    stock_unit = models.CharField(max_length=255, unique=True, default="")
+    stock_unit = models.CharField(max_length=255, unique=True)
     slug = models.SlugField()
     description = models.TextField(blank=True, null=True)
     purchase_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     sale_price = models.DecimalField(max_digits=6, decimal_places=2)
-    inventory = models.DecimalField(max_digits=6, decimal_places=0, default=0)
+    inventory = models.DecimalField(max_digits=10, decimal_places=0, default=0)
+    # total_inventory = models.DecimalField(max_digits=12, decimal_places=0, default=0)
+    # total_revenue = models.DecimalField(max_digits=12, decimal_places=0, default=0)
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         ordering = ('-date_added',)
@@ -71,6 +72,9 @@ class Product(models.Model):
         thumbnail = File(thumb_io, name=image.name)
 
         return thumbnail
+
+    # def calculate_total_inventory(self):
+    #     self.total_inventory = self.inventory*self.purchase_price
 
 
 # TODO: Create an order model.
